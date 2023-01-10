@@ -74,7 +74,7 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
                       Text(
                         '=',
                         style: TextStyle(
-                            fontSize: 35,
+                            fontSize: 20,
                             color: darkMode ? Colors.green : Colors.grey),
                       ),
                       Text(
@@ -155,7 +155,7 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       _buttonRounded(title: '0'),
-                      _buttonRounded(title: ','),
+                      _buttonRounded(title: '.'),
                       _buttonRounded(
                         title: "C",
                           textColor:
@@ -180,9 +180,22 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
         IconData? icon,
         Color? iconColor,
         Color? textColor} ){
+    double fontSize;
+    var screenSize = MediaQuery.of(context).size;
+    if (screenSize.width > 800) {
+      fontSize = 24;
+    } else if (screenSize.width > 600) {
+      fontSize = 25;
+    } else if (screenSize.height > 850) {
+      fontSize = 30;
+    }
+    else {
+      fontSize = 20;
+    }
     return Padding(
       padding: const EdgeInsets.all(8),
       child: InkWell(
+
         highlightColor: Colors.transparent,
         splashColor: Colors.transparent,
         onTap: () {
@@ -193,10 +206,10 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
         child: NeuContainer(
           darkMode: darkMode,
           borderRadius: BorderRadius.circular(40),
-          padding: EdgeInsets.all(padding),
+          padding:  EdgeInsets.all(MediaQuery.of(context).size.width/26),
           child: SizedBox(
-            width: MediaQuery.of(context).size.width/11,
-            height: MediaQuery.of(context).size.height/25,
+            width: padding * 2,
+            height: padding * 2,
             child: Center(
                 child: title != null
                     ? Text(
@@ -205,7 +218,8 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
                       color: textColor ?? (darkMode
                           ? Colors.white
                           : Colors.black),
-                      fontSize: 30),
+                      fontSize: fontSize,
+                    ),
                 )
                     : Icon(
                   icon,
@@ -224,10 +238,9 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
       child: NeuContainer(
         darkMode: darkMode,
         borderRadius: BorderRadius.circular(50),
-        padding:
-        EdgeInsets.symmetric(horizontal: padding, vertical: padding / 2),
+        padding: EdgeInsets.symmetric(horizontal: padding, vertical: padding / 2),
         child: SizedBox(
-          width: padding * 2,
+          width: MediaQuery.of(context).size.width/11,
           child: Center(
             child: Text(
               title,
