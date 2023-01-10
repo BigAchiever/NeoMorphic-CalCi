@@ -1,4 +1,4 @@
-# calculator
+# NeoMorphic CalCi
 
 A new Flutter project.
 
