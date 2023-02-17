@@ -35,15 +35,18 @@ class CalculatorNeuApp extends StatefulWidget {
 class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
   String input = "";
   String result = "0";
-
   bool darkMode = true;
+
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery
+        .of(context)
+        .size;
     return Scaffold(
       backgroundColor: darkMode ? colorDark : colorLight,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(18),
+          padding: EdgeInsets.all(size.width / 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -57,13 +60,13 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
                         });
                       },
                       child: _switchMode()),
-                  const SizedBox(height: 80),
+                  SizedBox(height: size.height / 15),
                   Align(
                     alignment: Alignment.centerRight,
                     child: Text(
                       result,
                       style: TextStyle(
-                          fontSize: 55,
+                          fontSize: size.height / 15,
                           fontWeight: FontWeight.bold,
                           color: darkMode ? Colors.white : Colors.red),
                     ),
@@ -74,27 +77,25 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
                       Text(
                         '=',
                         style: TextStyle(
-                            fontSize: 20,
+                            fontSize: size.height / 30,
                             color: darkMode ? Colors.green : Colors.grey),
                       ),
                       Text(
                         input,
                         style: TextStyle(
-                            fontSize: 20,
+                            fontSize: size.height / 40,
                             color: darkMode ? Colors.green : Colors.grey),
                       )
                     ],
                   ),
-                  const SizedBox(
-                    height: 10,
+                  SizedBox(
+                    height: size.height / 10,
                   )
                 ],
               ),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-
-                child: Column(
-                    children: [
+                child: Column(children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -108,7 +109,7 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       _buttonRounded(
-                          title: '-.-',
+                          title: 'AC',
                           textColor:
                           darkMode ? Colors.green : Colors.redAccent),
                       _buttonRounded(title: '('),
@@ -157,7 +158,7 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
                       _buttonRounded(title: '0'),
                       _buttonRounded(title: '.'),
                       _buttonRounded(
-                        title: "C",
+                          title: "C",
                           textColor:
                           darkMode ? Colors.green : Colors.redAccent),
                       _buttonRounded(
@@ -174,28 +175,27 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
     );
   }
 
-  Widget _buttonRounded(
-      { String title = "",
-        double padding = 17,
-        IconData? icon,
-        Color? iconColor,
-        Color? textColor} ){
+  Widget _buttonRounded({String title = "",
+    double padding = 17,
+    IconData? icon,
+    Color? iconColor,
+    Color? textColor}) {
     double fontSize;
-    var screenSize = MediaQuery.of(context).size;
+    var screenSize = MediaQuery
+        .of(context)
+        .size;
     if (screenSize.width > 800) {
       fontSize = 24;
     } else if (screenSize.width > 600) {
       fontSize = 25;
     } else if (screenSize.height > 850) {
       fontSize = 30;
-    }
-    else {
+    } else {
       fontSize = 20;
     }
     return Padding(
       padding: const EdgeInsets.all(8),
       child: InkWell(
-
         highlightColor: Colors.transparent,
         splashColor: Colors.transparent,
         onTap: () {
@@ -206,7 +206,10 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
         child: NeuContainer(
           darkMode: darkMode,
           borderRadius: BorderRadius.circular(40),
-          padding:  EdgeInsets.all(MediaQuery.of(context).size.width/26),
+          padding: EdgeInsets.all(MediaQuery
+              .of(context)
+              .size
+              .width / 26),
           child: SizedBox(
             width: padding * 2,
             height: padding * 2,
@@ -215,11 +218,10 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
                     ? Text(
                   title,
                   style: TextStyle(
-                      color: textColor ?? (darkMode
-                          ? Colors.white
-                          : Colors.black),
-                      fontSize: fontSize,
-                    ),
+                    color: textColor ??
+                        (darkMode ? Colors.white : Colors.black),
+                    fontSize: fontSize,
+                  ),
                 )
                     : Icon(
                   icon,
@@ -235,19 +237,33 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
   Widget _buttonOval({required String title, double padding = 16}) {
     return Padding(
       padding: const EdgeInsets.all(10),
-      child: NeuContainer(
-        darkMode: darkMode,
-        borderRadius: BorderRadius.circular(50),
-        padding: EdgeInsets.symmetric(horizontal: padding, vertical: padding / 2),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width/11,
-          child: Center(
-            child: Text(
-              title,
-              style: TextStyle(
-                  color: darkMode ? Colors.white : Colors.black,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold),
+      child: InkWell(
+        highlightColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        onTap: () {
+          setState(() {
+            handleButtons(title);
+          });
+        },
+        child: NeuContainer(
+          darkMode: darkMode,
+          borderRadius: BorderRadius.circular(50),
+          padding:
+          EdgeInsets.symmetric(horizontal: padding, vertical: padding / 2),
+
+          child: SizedBox(
+            width: MediaQuery
+                .of(context)
+                .size
+                .width / 11,
+            child: Center(
+              child: Text(
+                title,
+                style: TextStyle(
+                    color: darkMode ? Colors.white : Colors.black,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
           ),
         ),
@@ -256,12 +272,15 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
   }
 
   Widget _switchMode() {
+    final Size size = MediaQuery
+        .of(context)
+        .size;
     return NeuContainer(
       darkMode: darkMode,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       borderRadius: BorderRadius.circular(40),
       child: SizedBox(
-        width: 70,
+        width: size.width / 5,
         child:
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Icon(
@@ -276,27 +295,28 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
       ),
     );
   }
-  handleButtons(String title){
-    if(title == "-.-"){
+
+  void handleButtons(String title) {
+    if (title == "AC") {
       input = "";
       result = "0";
       return;
     }
-    if(title == "C"){
-      if(input.isNotEmpty){
-        input = input.substring(0, input.length-1);
+    if (title == "C") {
+      if (input.isNotEmpty) {
+        input = input.substring(0, input.length - 1);
         return;
       }
     }
-    if(title == "="){
+    if (title == "=") {
       result = calculate();
       input = result;
-      if(input.endsWith(".0")){
+      if (input.endsWith(".0")) {
         input = input.replaceAll(".0", "");
         return;
       }
 
-      if(result.endsWith(".0")){
+      if (result.endsWith(".0")) {
         result = result.replaceAll(".0", "");
         return;
       }
@@ -305,25 +325,47 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
         result = result.substring(0, decimalIndex + 4);
         return;
       }
-
     }
-    // result = calculate();
-    // int decimalIndex = result.indexOf(".");
-    // if (decimalIndex != -1 && result.length > decimalIndex + 3) {
-    //   result = result.substring(0, decimalIndex + 4);
-    // }
-
+    if (title == "(" && input.isNotEmpty) {
+      String lastChar = input[input.length - 1];
+      if (isNumeric(lastChar) || lastChar == ")") {
+        input += "*";
+      }
+    }
+    if (title == "sin") {
+      input += "sin(";
+      return;
+    }
+    if (title == "cos") {
+      input += "cos(";
+      return;
+    }
+    if (title == "tan") {
+      input += "tan(";
+      return;
+    }
+    if (title == "%") {
+      input += "%";
+      return;
+    }
 
     input = input + title;
   }
-  String calculate(){
+  bool isNumeric(String s) {
+    if (s == null) {
+      return false;
+    }
+    return double.tryParse(s) != null;
+  }
+
+  String calculate() {
     try {
-      var exp = Parser().parse(input);
+      // replace instances of )( with *
+      var updatedInput = input.replaceAll(')(', ')*(');
+      var exp = Parser().parse(updatedInput);
       var evaluation = exp.evaluate(EvaluationType.REAL, ContextModel());
       return evaluation.toString();
-
-    }
-    catch(e){
+    } catch (e) {
       return "Error";
     }
   }
